@@ -1,24 +1,17 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Algoritmo from './components/AlgoritmoBox/algoritmoBox';
+import Paginacao from './components/Paginacao/paginacao'
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1> Escalonamento de processos ;)</h1>
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <h1 className='text' > Escalonador de processos ;)</h1>
+        <div className='body' >
+          <Algoritmo/>
+          <Paginacao/>
+        </div>  
       </header>
     </div>
   );

@@ -1,0 +1,41 @@
+.corpo{
+    align-items: center;
+}
+
+
+.botoes {
+    display: flex;
+    gap: 20px;
+}
+.botao {
+    width: 124px;
+    height: 60px;
+    fill: #D9D9D9;
+    color: #242222;
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 2px 2px 4px rgba(243, 240, 240, 0.959);
+    
+}
+.botao:hover {
+    background-color: rgb(211, 191, 219);
+
+}
+
+.quantum {
+   display: flex;
+   justify-content: space-around;
+   
+}
+.titulo {
+    color: #FFF;
+    font-family: DM Sans;
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
