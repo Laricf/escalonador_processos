@@ -3,7 +3,7 @@ import './paginacao.css'
 function Paginacao () {
 
     return(
-        <main>
+        <div>
             <h2 className='titulo' >Paginação: </h2>
             <div className='botoes' >
                 <input className='botao' type="number" />
@@ -11,7 +11,7 @@ function Paginacao () {
                 <button className='botao' type="button" > MRU </button>
                 
             </div>
-        </main>
+        </div>
 
     );
 

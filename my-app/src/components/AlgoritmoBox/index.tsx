@@ -2,7 +2,7 @@ import './algoritmoBox.css'
 
 function Algoritmo() {
     return(
-        <main className='corpo' >
+        <div className='corpo' >
             <div className='algoritmo'>
                 <h2 className='titulo' >Selecione o Algoritmo:</h2>
                 <div className='botoes' >
@@ -22,7 +22,7 @@ function Algoritmo() {
                     <input className='botao' type='number' ></input>
                 </div>
             </div>
-        </main>
+        </div>
 
     );
 
