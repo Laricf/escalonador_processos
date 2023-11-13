@@ -6,17 +6,17 @@ function ProcessoCard() {
         <div className='boxCard'>
           <label htmlFor="" className="label">
             Tempo:
-            <input className="btn" type="number" />
+            <input className="btn" type="number" min='1' />
           </label>
           <label htmlFor="" className="label">
             Deadline:
-            <input className="btn" type="number" />
+            <input className="btn" type="number" min='0' />
           </label>
         </div>
         <div className='boxCard'>
         <label htmlFor="" className="label">
         Chegada:
-            <input className="btn" type="number" />
+            <input className="btn" type="number" min='1' />
           </label>
           <label htmlFor="" className="label">
             Páginas:
