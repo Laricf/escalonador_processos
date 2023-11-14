@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
 import Algoritmo from './components/AlgoritmoBox';
-import Paginacao from './components/Paginacao';
 import Processos from './components/ProcessoCard';
 import { ICondicao } from './interfaces/Condicao';
 
@@ -9,8 +8,8 @@ function App() {
   
 
   const estadoInicial: ICondicao = {
-    metodos: "FIFO",
-    paginacao: "Fifo",
+    metodo: "FIFO",
+    paginacao: "FIFO",
     quantum: 0,
     sobrecarga: 2,
     intervalo: 0,
@@ -27,7 +26,6 @@ function App() {
       <main>
         <div className="firstSection">
           <Algoritmo conditions={conditions} setConditions={setConditions}  />
-          <Paginacao />
         </div>
 
         <div className="secondSection">

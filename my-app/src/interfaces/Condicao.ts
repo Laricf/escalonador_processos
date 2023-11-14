@@ -1,6 +1,6 @@
 export interface ICondicao {
-    metodos: "FIFO" | "SJF" | "EDF" | "RR";
-    paginacao: "Fifo" | "MRU";
+    metodo: "FIFO" | "SJF" | "EDF" | "RR";
+    paginacao: "FIFO" | "MRU";
     quantum: number;
     sobrecarga: number;
     intervalo: number;
