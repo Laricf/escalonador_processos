@@ -1,28 +1,47 @@
 .corpo {
-  align-items: center;
-  display: flex;
-  justify-content: space-evenly;
   width: 100%;
-
-
 }
 
-.algoritmo,
-.paginacao{
+.algoritmo{
     display: flex;
-    flex-direction: column;
-    height: 10em;
-    justify-content: space-around;
+    justify-content: center;
+    gap: 5em;
+  }
 
+.metodos h2{
+  align-self: flex-start;
 }
-
+.metodos{
+  min-width: 40em;
+  width: 50em;
+  height: 18em;
+  justify-content: space-evenly;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.container-metodos{
+  display: flex;
+  justify-content: space-around;
+  gap: 3em;
+  flex-direction: column ;
+  align-items: center;
+}
+.paginacao{
+  width: 25em;
+  height: 18em;
+  gap: 2em;
+  margin-top: 1em;
+  display: flex;
+  flex-direction: column;
+}
 
 .botoes{
     display: flex;
-    width: 100%;
+    justify-content: center;
     gap: 2em;
-background-color: #fff;
 }
+
 form div{
     display: flex;
     gap: 1em;
@@ -47,7 +66,14 @@ form div{
 
 .quantum-sobrecarga {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
+  gap: 2em;
+  width: 100%;
+}
+.quantum-sobrecarga div{
+  display: flex;
+  gap: .8em;
+  align-items: center;
 }
 .titulo {
   color: #fff;
