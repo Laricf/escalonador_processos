@@ -4,9 +4,16 @@ import Algoritmo from './components/AlgoritmoBox';
 import Processos from './components/ProcessoCard';
 import { ICondicao } from './interfaces/Condicao';
 
-function App() {
-  
+interface Processo {
+  id: number;
+  tempoExecucao: number 
+  tempoChegada: number;
+  numeroPagina: number;
+  deadline: number;
+  // Outras informações do processo...
+}
 
+function App() {
   const estadoInicial: ICondicao = {
     metodo: "FIFO",
     paginacao: "FIFO",
@@ -16,8 +23,24 @@ function App() {
   };
 
   const [conditions, setConditions] = useState<ICondicao>(estadoInicial);
+  const [processosLista, setProcessosLista] = useState<Processo[]>([]);
 
-  
+  const adicionarProcesso = () => {
+    console.log('Clicou no botão de adicionar processo');
+    const novoProcesso: Processo = {
+      id: processosLista.length + 1,
+      tempoExecucao: 0,
+      tempoChegada: 0,
+      numeroPagina: 0,
+      deadline: 1,
+      
+      // Outras informações do processo...
+    };
+    console.log('Novo processo:', novoProcesso);
+
+    setProcessosLista((prevProcessosLista) => [...prevProcessosLista, novoProcesso]);
+  };
+
   return (
     <div className="App">
       <header className="App-header">
@@ -25,14 +48,14 @@ function App() {
       </header>
       <main>
         <div className="firstSection">
-          <Algoritmo conditions={conditions} setConditions={setConditions}  />
+          <Algoritmo conditions={conditions} setConditions={setConditions} />
         </div>
 
         <div className="secondSection">
           <h2 className="subtitle">Criando processos:</h2>
           <div className="boxProcess">
-            <Processos />
-            <button className="plus"></button>
+            <Processos processosLista={processosLista} />
+            <button className="plus" onClick={adicionarProcesso}></button>
           </div>
         </div>
 
