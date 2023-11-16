@@ -33,8 +33,7 @@ function App() {
       tempoChegada: 0,
       numeroPagina: 0,
       deadline: 1,
-      
-      // Outras informações do processo...
+    
     };
     console.log('Novo processo:', novoProcesso);
 
@@ -52,13 +51,11 @@ function App() {
         </div>
 
         <div className="secondSection">
-          <h2 className="subtitle">Criando processos:</h2>
           <div className="boxProcess">
             <Processos processosLista={processosLista} />
             <button className="plus" onClick={adicionarProcesso}></button>
           </div>
         </div>
-
         <div className="thirdSection">
           <button>Run</button>
           <button>Reset</button>

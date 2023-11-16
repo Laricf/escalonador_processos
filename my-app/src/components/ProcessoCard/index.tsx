@@ -51,6 +51,7 @@ const ProcessoCard: React.FC<ProcessoCardProps> = ({
 }) => {
   return (
     <main className='cardinteiro' >
+      <h2 className="subtitle" >Criando Processos:</h2>
       <div className="card">
         <div className='boxCard'>
           <label htmlFor="" className="label">
@@ -72,16 +73,16 @@ const ProcessoCard: React.FC<ProcessoCardProps> = ({
             <input className="btn" type="number" value={paginas} />
           </label>
         </div>
-        <div className="cardLista ">
-          <h2>Lista de Processos:</h2>
-          <ul className='processoslista'>
+        <button className='exit'></button>
+      </div>
+      <div className="cardLista ">
+          <h2 className="subtitle">Lista de Processos:</h2>
+          <div className='processoslista'>
             {processosLista.map((processo) => (
               <ProcessoItem key={processo.id} processo={processo}  />
             ))}
-          </ul>
+          </div>
         </div>
-        <button className='exit'></button>
-      </div>
     </main>
   );
 };
