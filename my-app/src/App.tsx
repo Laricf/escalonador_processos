@@ -3,6 +3,7 @@ import './App.css';
 import Algoritmo from './components/AlgoritmoBox';
 import Processos from './components/ProcessoCard';
 import { ICondicao } from './interfaces/Condicao';
+import Grafico from './components/Grafico'
 
 interface Processo {
   id: number;
@@ -54,15 +55,16 @@ function App() {
         <div className="secondSection">
           <div className="boxProcess">
             <Processos processosLista={processosLista} />
+            <div className='botaoadicionar'>
+              <button className="plus" onClick={adicionarProcesso}></button>
           </div>
-          <div className='botaoadicionar'>
-            <button className="plus" onClick={adicionarProcesso}></button>
           </div>
         </div>
         <div className="thirdSection">
           <button>Run</button>
           <button>Reset</button>
         </div>
+        <Grafico />
       </main>
     </div>
   );

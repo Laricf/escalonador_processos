@@ -19,9 +19,11 @@ interface Processo {
   deadline?: number
 }
 
+
+
 const ProcessoCard: React.FC<ProcessoCardProps> = ({ processosLista }) => {
   const [tempoInput, setTempoInput] = useState<number>(1);
-  const [deadlineInput, setDeadlineInput] = useState<number>();
+  const [deadlineInput, setDeadlineInput] = useState<number>(0);
   const [chegadaInput, setChegadaInput] = useState<number>(1);
   const [paginasInput, setPaginasInput] = useState<number>(0);
   const [novaListaProcessos, setNovaListaProcessos] = useState<Processo[]>(processosLista);
@@ -64,6 +66,7 @@ const ProcessoCard: React.FC<ProcessoCardProps> = ({ processosLista }) => {
           Páginas:{processo.numeroPagina}
         </label>
       </div>
+      <button className='exit'></button>
     </div>
   );
   
@@ -105,7 +108,7 @@ const ProcessoCard: React.FC<ProcessoCardProps> = ({ processosLista }) => {
               <ProcessoItem key={processo.id} processo={processo}  />
             ))}
           </div>
-          <button  onClick={adicionarProcesso} >adicionar processo</button>
+          <button onClick={adicionarProcesso} >Adicionar</button>
         </div>
     </main>
   );

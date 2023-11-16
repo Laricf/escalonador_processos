@@ -37,12 +37,13 @@ main{
 .secondSection{
   margin: auto;
   width: 90%;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  
 }
 
 .botaoadicionar {
-  
+  margin-top: 11rem;
+  position: absolute;
+  margin-left: 30rem;
 }
 
 .title{
@@ -59,6 +60,9 @@ main{
 .boxProcess{
   display: flex;
   align-items: flex-start;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  
 }
 
 .plus{
