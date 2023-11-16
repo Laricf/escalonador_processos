@@ -37,10 +37,13 @@ main{
 .secondSection{
   margin: auto;
   width: 90%;
-  display: flex;
-  justify-content: start;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
 }
 
+.botaoadicionar {
+  
+}
 
 .title{
   color: white;

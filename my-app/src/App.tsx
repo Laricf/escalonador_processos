@@ -10,7 +10,7 @@ interface Processo {
   tempoChegada: number;
   numeroPagina: number;
   deadline: number;
-  // Outras informações do processo...
+  
 }
 
 function App() {
@@ -24,13 +24,14 @@ function App() {
 
   const [conditions, setConditions] = useState<ICondicao>(estadoInicial);
   const [processosLista, setProcessosLista] = useState<Processo[]>([]);
+  
 
   const adicionarProcesso = () => {
     console.log('Clicou no botão de adicionar processo');
     const novoProcesso: Processo = {
       id: processosLista.length + 1,
-      tempoExecucao: 0,
-      tempoChegada: 0,
+      tempoExecucao: 1,
+      tempoChegada: 1,
       numeroPagina: 0,
       deadline: 1,
     
@@ -53,6 +54,8 @@ function App() {
         <div className="secondSection">
           <div className="boxProcess">
             <Processos processosLista={processosLista} />
+          </div>
+          <div className='botaoadicionar'>
             <button className="plus" onClick={adicionarProcesso}></button>
           </div>
         </div>
