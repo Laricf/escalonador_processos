@@ -10,8 +10,6 @@
   border-radius: 5px;
   cursor: pointer;
   box-shadow: 2px 2px 4px rgba(243, 240, 240, 0.959);
-  
-  
 }
 .card2 {
   background-color: #d9d9d9;
@@ -26,7 +24,6 @@
   cursor: pointer;
   box-shadow: 2px 2px 4px rgba(243, 240, 240, 0.959);
   margin-top: 2rem;
-  
 }
 .boxCard{
   display: flex;
