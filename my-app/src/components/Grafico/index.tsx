@@ -36,7 +36,7 @@ const HorizontalBarChart: React.FC = () => {
   return (
     <div>
       <h2>Gráfico de Processos (Horizontal)</h2>
-      <Bar data={data} options={options as any} /> "// O options precisa ser desse jeito pra não dar erro "
+      <Bar data={data} options={options as any} /> 
     </div>
   );
 };

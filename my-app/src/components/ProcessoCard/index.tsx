@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './processoCard.css'
 
 
@@ -19,6 +19,9 @@ interface Processo {
   deadline?: number
 }
 
+interface ProcessoCardProps {
+  novaListaProcessos: Processo[]; // Alteramos processosLista para novaListaProcessos
+}
 
 
 const ProcessoCard: React.FC<ProcessoCardProps> = ({ processosLista }) => {
@@ -26,7 +29,7 @@ const ProcessoCard: React.FC<ProcessoCardProps> = ({ processosLista }) => {
   const [deadlineInput, setDeadlineInput] = useState<number>(0);
   const [chegadaInput, setChegadaInput] = useState<number>(1);
   const [paginasInput, setPaginasInput] = useState<number>(0);
-  const [novaListaProcessos, setNovaListaProcessos] = useState<Processo[]>(processosLista);
+  const [novaListaProcessos, setNovaListaProcessos] = useState<Processo[]>([]);
 
   const adicionarProcesso = () => {
     const novoProcesso: Processo = {
@@ -43,6 +46,17 @@ const ProcessoCard: React.FC<ProcessoCardProps> = ({ processosLista }) => {
 
     setNovaListaProcessos((prevProcessosLista) => [...prevProcessosLista, novoProcesso]);
   };
+
+  const handleDelete = (id: number) => {
+    const updatedCards = novaListaProcessos.filter((processo) => processo.id !== id);
+    console.log("Item excluído com o ID:", id);
+    console.log("Nova lista de processos:", updatedCards);
+    setNovaListaProcessos(updatedCards);
+  };
+
+  useEffect(() => {
+    setNovaListaProcessos(processosLista); // Atualiza a lista local quando processosLista mudar
+  }, [processosLista]);
  
   interface ProcessoItemProps {
     processo: Processo;
@@ -66,7 +80,7 @@ const ProcessoCard: React.FC<ProcessoCardProps> = ({ processosLista }) => {
           Páginas:{processo.numeroPagina}
         </label>
       </div>
-      <button className='exit'></button>
+      <button className='exit' onClick={() => handleDelete(processo.id)}>Sair</button>
     </div>
   );
   
@@ -99,7 +113,6 @@ const ProcessoCard: React.FC<ProcessoCardProps> = ({ processosLista }) => {
               onChange={(e) => setPaginasInput(parseInt(e.target.value))} />
           </label>
         </div>
-        <button className='exit'></button>
       </div>
       <div className="cardLista ">
           <h2 className="subtitle">Lista de Processos:</h2>
