@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useRef, useState} from 'react';
 import './App.css';
 import Algoritmo from './components/AlgoritmoBox';
 import { ICondicao } from './interfaces/Condicao';
 import Grafico from './components/Grafico/index';
+import FIFO from './algoritmos_escalonamento/fifo';
+import SJF from './algoritmos_escalonamento/sjf'
+import ChartJS, { Chart, ChartType } from 'chart.js/auto';
 
 
 interface Processo {
@@ -22,6 +25,8 @@ function App() {
     intervalo: 0,
   };
 
+  
+
   const [conditions, setConditions] = useState<ICondicao>(estadoInicial);
   const [processosLista, setProcessosLista] = useState<Processo[]>([]);
   const [tempoInput, setTempoInput] = useState<number>(1);
@@ -29,6 +34,7 @@ function App() {
   const [chegadaInput, setChegadaInput] = useState<number>(1);
   const [paginasInput, setPaginasInput] = useState<number>(0);
   const [novaListaProcessos, setNovaListaProcessos] = useState<Processo[]>([]);
+  const [algoritmoSelecionado, setAlgoritmoSelecionado] = useState<string>('FIFO');
 
   const adicionarProcesso = () => {
     console.log('Clicou no botão de adicionar processo');
@@ -54,7 +60,82 @@ function App() {
     setNovaListaProcessos(updatedCards);
   };
 
+  const escalonadores: Record<string, any> = {
+    FIFO: FIFO,
+    SJF: SJF,
+    // Adicione outros escalonadores aqui
+  };
  
+
+  const handleRun = () => {
+    const escalonadorSelecionado = escalonadores[algoritmoSelecionado];
+    if (escalonadorSelecionado) {
+      console.log('Rodando o algoritmo:', algoritmoSelecionado); // Adiciona o console.log aqui
+      const resultadoEscalonamento = new escalonadorSelecionado().escalonador(processosLista);
+      console.log('Resultado do escalonamento:', resultadoEscalonamento);
+      plotChart(resultadoEscalonamento);
+    } else {
+      console.error('Escalonador não encontrado.');
+    }
+  };
+
+ 
+  const chartRef = useRef<HTMLCanvasElement | null>(null);
+  const [chart, setChart] = useState<Chart<"line"> | null>(null);
+
+  const plotChart = (resultadoEscalonamento: number[]) => {
+    if (chartRef.current) {
+      const ctx = chartRef.current.getContext('2d');
+      if (ctx) {
+        const data = resultadoEscalonamento.map((value, index) => ({
+          x: index ,
+          y: value,
+        }));
+
+        console.log('Dados do gráfico:', data);
+
+        if (chart) {
+          chart.data.datasets[0].data = data;
+          chart.update();
+        } else {
+          const newChart = new Chart(ctx, {
+            type: 'line', 
+            data: {
+              datasets: [
+                {
+                  label: 'Execução dos Processos',
+                  data: data,
+                  backgroundColor: 'rgba(99, 230, 19, 0.2)', // Cor de fundo
+                  borderColor: 'rgba(255, 99, 132, 1)', // Cor da linha
+                  borderWidth: 2,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: {
+                x: {
+                  title: {
+                    display: true,
+                    text: 'Tempo',
+                  },
+                },
+                y: {
+                  title: {
+                    display: true,
+                    text: 'ID do Processo',
+                  },
+                },
+              },
+            },
+          });
+          setChart(newChart);
+        }
+      }
+    }
+  };
+
 
   return (
     <div className="App">
@@ -97,7 +178,6 @@ function App() {
                 </div>
                 <button onClick={adicionarProcesso}>Adicionar</button>
               </div>
-
               <div className="cardLista ">
                 <h2 className="subtitle">Lista de Processos:</h2>
                 <div className='processoslista'>
@@ -128,10 +208,10 @@ function App() {
           </div>
         </div>
         <div className="thirdSection">
-          <button>Run</button>
+          <button onClick={handleRun} >Run</button>
           <button>Reset</button>
         </div>
-        <Grafico/>
+        <canvas ref={chartRef} id="myChart" width="10" height="10"></canvas>
       </main>
     </div>
   );
