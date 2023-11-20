@@ -8,7 +8,7 @@
 
 .App{
   background-color: #242222;
-  height: 100vh;
+  height: 100%;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -37,13 +37,14 @@ main{
 .secondSection{
   margin: auto;
   width: 90%;
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-
-
+  
 }
 
+.botaoadicionar {
+  margin-top: 11rem;
+  position: absolute;
+  margin-left: 30rem;
+}
 
 .title{
   color: white;
@@ -58,9 +59,10 @@ main{
 
 .boxProcess{
   display: flex;
-  align-items: center;
-  gap: 3rem;
-  width: 100%;
+  align-items: flex-start;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  
 }
 
 .plus{
@@ -81,7 +83,6 @@ main{
   justify-content: center;
   align-items: center;
   gap: 2rem;
-
 }
 .thirdSection button{
   text-transform: uppercase;
@@ -94,3 +95,88 @@ main{
   border: none;
   cursor: pointer;
 }
+
+.card {
+  background-color: #d9d9d9;
+  width: 23em;
+  height: 13em;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  border-radius: .2em;
+  margin-left: 1.5em;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: 2px 2px 4px rgba(243, 240, 240, 0.959);
+}
+.card2 {
+  background-color: #d9d9d9;
+  width: 23em;
+  height: 13em;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  border-radius: .2em;
+  margin-left: 1.5em;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: 2px 2px 4px rgba(243, 240, 240, 0.959);
+  margin-top: 2rem;
+}
+
+.boxCard{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .5em;
+}
+
+.label {
+  display: flex;
+  gap:.2em;
+  flex-direction: column;
+  text-align: left;
+}
+
+.btn {
+  width: 110px;
+  height: 50px;
+  background-color: #737373;
+  color: #242222;
+  font-size: 25px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  border-radius: 5px;
+  cursor: pointer;
+  border: none;
+  display: flex;
+  justify-items: center;
+  align-items: center;
+  
+}
+
+.processoslista{  
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  width: 90%;
+  margin-left: 10rem;
+  
+  }
+
+  .cardinteiro {
+    height: 100%;
+    width: 100%;
+  }
+
+  .cardinfo{
+    font-size: large;
+    
+  }
+
+  .boxCard2{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .5em;
+  }

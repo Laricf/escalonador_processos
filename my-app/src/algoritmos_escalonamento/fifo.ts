@@ -1,7 +1,7 @@
 import Escalonador from "../interfaces/Escalonador";
 import { IProcesso } from "../interfaces/Processo";
 
-class FIFOAlgoritmo implements Escalonador {
+class FIFO implements Escalonador {
     public escalonador(processos: IProcesso[]): any {
         let escalonador: number[] = [];
         let nProcessoAtual: IProcesso;
@@ -30,7 +30,7 @@ class FIFOAlgoritmo implements Escalonador {
 
     }
 }
-export default FIFOAlgoritmo;
+export default FIFO;
 
        
 
