@@ -4,7 +4,9 @@ import Algoritmo from './components/AlgoritmoBox';
 import { ICondicao } from './interfaces/Condicao';
 import Grafico from './components/Grafico/index';
 import FIFO from './algoritmos_escalonamento/fifo';
-import SJF from './algoritmos_escalonamento/sjf'
+import SJF from './algoritmos_escalonamento/sjf';
+import EDF from './algoritmos_escalonamento/edf';
+import roundRobin from './algoritmos_escalonamento/roundRobin';
 import ChartJS, { Chart, ChartType } from 'chart.js/auto';
 
 
@@ -34,7 +36,8 @@ function App() {
   const [chegadaInput, setChegadaInput] = useState<number>(1);
   const [paginasInput, setPaginasInput] = useState<number>(0);
   const [novaListaProcessos, setNovaListaProcessos] = useState<Processo[]>([]);
-  const [algoritmoSelecionado, setAlgoritmoSelecionado] = useState<string>('FIFO');
+  const [algoritmoSelecionado, setAlgoritmoSelecionado] = useState<string>('RR');
+ 
 
   const adicionarProcesso = () => {
     console.log('Clicou no botão de adicionar processo');
@@ -63,6 +66,8 @@ function App() {
   const escalonadores: Record<string, any> = {
     FIFO: FIFO,
     SJF: SJF,
+    EDF: EDF,
+    RR: roundRobin
     // Adicione outros escalonadores aqui
   };
  
