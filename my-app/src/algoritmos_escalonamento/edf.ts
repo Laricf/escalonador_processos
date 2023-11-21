@@ -56,6 +56,7 @@ export default class EDFescalonador implements Escalonador {
             } else {
                 vetorDeProcessos.splice(menorprazoFinalIndex, 1);
             }
+            console.log(vetorDeProcessos + "FILA")
         }
 
         return escalonador;

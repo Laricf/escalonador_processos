@@ -36,7 +36,7 @@ class SJFAlgoritmo implements Escalonador {
             filaDeProcessosMap = filaDeProcessosMap.filter(processo => processo.id !== processoAtual.id);
         }
 
-        return escalonador && console.log(escalonador + "SJF");
+        return escalonador;
     }
 }
 export default SJFAlgoritmo;

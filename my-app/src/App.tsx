@@ -36,7 +36,7 @@ function App() {
   const [chegadaInput, setChegadaInput] = useState<number>(1);
   const [paginasInput, setPaginasInput] = useState<number>(0);
   const [novaListaProcessos, setNovaListaProcessos] = useState<Processo[]>([]);
-  const [algoritmoSelecionado, setAlgoritmoSelecionado] = useState<string>('RR');
+  const [algoritmoSelecionado, setAlgoritmoSelecionado] = useState<string>('EDF');
  
 
   const adicionarProcesso = () => {

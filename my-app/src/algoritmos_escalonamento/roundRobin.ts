@@ -4,11 +4,11 @@ import RotatingQueue from "../dados/RotatingQueue";
 
 export default class RoundRobinAlgortimo implements Escalonador {
     public escalonador(
-        processo: IProcesso[], 
-        quantum: number, 
+        processos: IProcesso[], 
+        quantum: number = 2, 
         sobrecarga: number = 1 
         ): number[] {
-            let vetorDeProcessos: IProcesso[] = [...processo].map((obj) => Object.assign({}, obj));
+            let vetorDeProcessos: IProcesso[] = [...processos].map((obj) => Object.assign({}, obj));
         let escalonador: number [] = [];
         let nProcessoAtual: IProcesso;
         let tempoExecucaoAtual: number = 0;
@@ -31,7 +31,7 @@ export default class RoundRobinAlgortimo implements Escalonador {
 
             fila.addElementos(chegadaProcesso);
 
-            if (fimUltimoProcesso = false) {
+            if (fimUltimoProcesso === false) {
                 fila.rotate();
             }
 
@@ -39,21 +39,25 @@ export default class RoundRobinAlgortimo implements Escalonador {
             nProcessoAtual = vetorDeProcessos[indexProcesso];
 
             interacaoProcesso = Math.min(nProcessoAtual?.tempoChegada, quantum);
-            for(let i=0; i < interacaoProcesso; i++) {
+            for(let i = 0; i < interacaoProcesso; i++) {
                 //plotar gráfico
+                nProcessoAtual.tempoExecucao -= 1;
                 tempoExecucaoAtual++;
             }
 
             if (nProcessoAtual.tempoExecucao !== 0) {
                 for (let i = 0; i < sobrecarga; i++) {
-                    //plotar grafico
+                    escalonador[tempoExecucaoAtual] = -1;
                     tempoExecucaoAtual++;
                 }
+                fimUltimoProcesso = false;
             } else {
                 vetorDeProcessos.splice(indexProcesso, 1);
                 fila.remove(nProcessoAtual.id);
                 fimUltimoProcesso = true;
             }
+
+            console.log(vetorDeProcessos + "FILA")
 
         }
         return escalonador;
@@ -69,9 +73,9 @@ export default class RoundRobinAlgortimo implements Escalonador {
     //    return -1;
     //}
 
-    private pegaIndexProcesso(processoId: number, processo: IProcesso[]){
-        for (let i=0; i<processo.length; i++){
-            if (processo[i].id==processoId){
+    private pegaIndexProcesso(processoId: number, processos: IProcesso[]){
+        for (let i = 0; i < processos.length; i++){
+            if (processos[i].id === processoId){
                 return i;
             }
         }
