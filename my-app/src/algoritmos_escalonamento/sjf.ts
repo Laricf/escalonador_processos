@@ -1,7 +1,7 @@
 import Escalonador from "../interfaces/Escalonador";
 import { IProcesso } from "../interfaces/Processo";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 class SJFAlgoritmo implements Escalonador {
 
     public escalonador(processos: IProcesso[]): any {
@@ -12,7 +12,7 @@ class SJFAlgoritmo implements Escalonador {
 
         while (filaDeProcessosMap.length) {
             // Filtra os processos que já chegaram
-            // eslint-disable-next-line no-loop-func
+
             const processosChegados = filaDeProcessosMap.filter(processo => processo.tempoChegada <= tempoExecucaoAtual);
 
             if (processosChegados.length === 0) {
@@ -34,6 +34,8 @@ class SJFAlgoritmo implements Escalonador {
 
             // Remove o processo da fila
             filaDeProcessosMap = filaDeProcessosMap.filter(processo => processo.id !== processoAtual.id);
+            
+           // console.log(filaDeProcessosMap + "FILA")
         }
 
         return escalonador;
