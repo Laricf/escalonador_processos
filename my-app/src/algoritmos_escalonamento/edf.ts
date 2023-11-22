@@ -6,8 +6,8 @@ import Escalonador from "../interfaces/Escalonador";
 export default class EDFescalonador implements Escalonador {
     public escalonador(
         processos: IProcesso[],
-        quantum: number = 0,
-        sobrecarga: number = 0
+        quantum: number = 2,
+        sobrecarga: number = 1
     ): number[] {
         let vetorDeProcessos: IProcesso[] = [...processos].map((processo) =>
         Object.assign({}, processo)
@@ -18,7 +18,7 @@ export default class EDFescalonador implements Escalonador {
         let interacaoProcesso: number = 0;
 
          
-        for (let i=0; i < vetorDeProcessos.length; i++) {
+        while (vetorDeProcessos.length !==0) {
             const chegadaProcesso: number[] = vetorDeProcessos
             .map((processo, index) => 
             processo.tempoChegada <= tempoExecucaoAtual ? index : -1
