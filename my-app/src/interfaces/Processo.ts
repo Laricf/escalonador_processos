@@ -4,6 +4,7 @@ export interface IProcesso {
     tempoChegada: number;
     numeroPagina: number;
     deadline?: number;
+    nPaginas: number;
    
   }
   
