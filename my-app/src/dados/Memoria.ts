@@ -28,27 +28,27 @@ export default class Memoria implements IMemoria {
     Adiciona um processo à memória, marcando o número de páginas especificado (numPages) com o processId.
     Verifica se há espaço suficiente na memória antes de armazenar o processo.
     */
-    public armazenar(processId: number, numPages: number): void {
+    public armazenar(processId: number, nPaginas: number): void {
       let amazenamentoContador = 0;
       const memoriaLiberar: number = this.memoriaLiberar;
       //Se o numero de pagina menor que quantidade de espaço livre na memória, pode adicionar um processo a memoria
-      if (numPages <= memoriaLiberar) {
+      if (nPaginas <= memoriaLiberar) {
         for (let i = 0; i < this.tamanhoArmazenamento; i++) {
           if (isNaN(this.listaArmazenamento[i])) {
             this.listaArmazenamento[i] = processId;
             amazenamentoContador++;
           }
   
-          if (amazenamentoContador === numPages) break;
+          if (amazenamentoContador === nPaginas) break;
         }
       } else {
         console.log("Falta espaco disco, memoriaLiberar:" + memoriaLiberar);
       }
     }
     /*Responsabilidades:
-        Liberação espaço na memória, removendo as instâncias do id do processo até atingir o número de páginas desejado (numPages).
+        Liberação espaço na memória, removendo as instâncias do id do processo até atingir o número de páginas desejado (nPaginas).
     */
-    public liberar(processId: number, numPages: number): void {
+    public liberar(processId: number, nPaginas: number): void {
       let remocaoContador: number = 0;
       for (let i = 0; i < this.tamanhoArmazenamento; i++) {
         if (this.listaArmazenamento[i] === processId) {
@@ -56,7 +56,7 @@ export default class Memoria implements IMemoria {
           remocaoContador++;
         }
   
-        if (remocaoContador == numPages) break;
+        if (remocaoContador == nPaginas) break;
       }
     }
   }

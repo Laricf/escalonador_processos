@@ -5,10 +5,10 @@ import { IProcesso } from "../interfaces/Processo";
 
 abstract class MemoriaAbstracao implements IAlgoritmoPaginacao {
 
-   /* ram: Representa a memória principal (RAM) e é do tipo IMemoria.
-disco: Representa o disco (memória secundária) e também é do tipo IMemoria.
-tabelaPagina: É um mapa que armazena o número de páginas associado a cada processo.
-nPagMap: Também é um mapa que mantém o número de páginas para cada processo. */
+/* ram:  memória principal (RAM) e é do tipo IMemoria.
+disco: o disco (memória secundária) e também é do tipo IMemoria.
+tabelaPagina: mapa que armazena o número de páginas associado a cada processo.
+nPagMap: apa que mantém o número de páginas para cada processo. */
 
     protected ram: IMemoria;
     protected disco: IMemoria;
