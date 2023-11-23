@@ -8,6 +8,9 @@ import SJF from './algoritmos_escalonamento/sjf';
 import EDF from './algoritmos_escalonamento/edf';
 import roundRobin from './algoritmos_escalonamento/roundRobin';
 import ChartJS, { Chart, ChartType } from 'chart.js/auto';
+import ApexCharts from 'react-apexcharts';
+import ReactApexChart from 'react-apexcharts';
+import { IProcesso } from './interfaces/Processo';
 
 
 interface Processo {
@@ -18,7 +21,7 @@ interface Processo {
   deadline: number;
 }
 
-function App() {
+const App: React.FC = () => {
   const estadoInicial: ICondicao = {
     metodo: "FIFO",
     paginacao: "FIFO",
@@ -26,9 +29,7 @@ function App() {
     sobrecarga: 2,
     intervalo: 0,
   };
-
-  
-
+ 
   const [conditions, setConditions] = useState<ICondicao>(estadoInicial);
   const [processosLista, setProcessosLista] = useState<Processo[]>([]);
   const [tempoInput, setTempoInput] = useState<number>(1);
@@ -36,8 +37,8 @@ function App() {
   const [chegadaInput, setChegadaInput] = useState<number>(1);
   const [paginasInput, setPaginasInput] = useState<number>(0);
   const [novaListaProcessos, setNovaListaProcessos] = useState<Processo[]>([]);
-  const [algoritmoSelecionado, setAlgoritmoSelecionado] = useState<string>('');
- 
+  const [algoritmoSelecionado, setAlgoritmoSelecionado] = useState<string>('EDF');
+  const [resultadoEscalonamento, setResultadoEscalonamento] = useState<number[][] | null>(null);
 
   const adicionarProcesso = () => {
     console.log('Clicou no botão de adicionar processo');
@@ -78,10 +79,23 @@ function App() {
   const handleRun = () => {
     const escalonadorSelecionado = escalonadores[algoritmoSelecionado];
     if (escalonadorSelecionado) {
-      console.log('Rodando o algoritmo:', algoritmoSelecionado); // Adiciona o console.log aqui
-      const resultadoEscalonamento = new escalonadorSelecionado().escalonador(processosLista);
+      console.log('Rodando o algoritmo:', algoritmoSelecionado);
+
+      // Atualizar os processos com as condições selecionadas antes de rodar o escalonador
+      const novosProcessos = processosLista.map((processo) => ({
+        ...processo,
+        metodo: conditions.metodo,
+        paginacao: conditions.paginacao,
+        quantum: conditions.quantum,
+        sobrecarga: conditions.sobrecarga,
+        intervalo: conditions.intervalo,
+      }));
+      console.log('Valor de sobrecarga:', conditions.sobrecarga);
+      console.log('Valor de quantum:', conditions.quantum);
+
+      // Executar o escalonador com os novos processos
+      const resultadoEscalonamento = new escalonadorSelecionado().escalonador(novosProcessos);
       console.log('Resultado do escalonamento:', resultadoEscalonamento);
-      plotChart(resultadoEscalonamento);
     } else {
       console.error('Escalonador não encontrado.');
     }
@@ -121,6 +135,7 @@ function App() {
             },
             options: {
               responsive: true,
+              maintainAspectRatio: false,
               scales: {
                 x: {
                   title: {
@@ -151,7 +166,9 @@ function App() {
       </header>
       <main>
         <div className="firstSection">
-          <Algoritmo conditions={conditions} setConditions={setConditions} />
+        <Algoritmo conditions={conditions} setConditions={setConditions} processosLista={processosLista} setProcessosLista={function (value: React.SetStateAction<IProcesso[]>): void {
+            throw new Error('Function not implemented.');
+          } } />
         </div>
 
         <div className="secondSection">
@@ -218,7 +235,6 @@ function App() {
           <button onClick={handleRun} >Run</button>
           <button>Reset</button>
         </div>
-        <canvas ref={chartRef} id="myChart" width="10" height="10"></canvas>
       </main>
     </div>
   );
