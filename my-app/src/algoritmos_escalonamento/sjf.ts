@@ -13,6 +13,7 @@ class SJFAlgoritmo implements Escalonador {
         while (filaDeProcessosMap.length) {
             // Filtra os processos que já chegaram
 
+            // eslint-disable-next-line no-loop-func
             const processosChegados = filaDeProcessosMap.filter(processo => processo.tempoChegada <= tempoExecucaoAtual);
 
             if (processosChegados.length === 0) {

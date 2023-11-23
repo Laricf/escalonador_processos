@@ -20,6 +20,7 @@ export default class RoundRobinAlgortimo implements Escalonador {
 
         while (vetorDeProcessos.length !== 0) {
             const chegadaProcesso = vetorDeProcessos
+            // eslint-disable-next-line no-loop-func
             .filter((processo) => processo.tempoChegada <= tempoExecucaoAtual)
             .map((processo) => processo.id);
 
