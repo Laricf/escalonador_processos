@@ -36,7 +36,7 @@ function App() {
   const [chegadaInput, setChegadaInput] = useState<number>(1);
   const [paginasInput, setPaginasInput] = useState<number>(0);
   const [novaListaProcessos, setNovaListaProcessos] = useState<Processo[]>([]);
-  const [algoritmoSelecionado, setAlgoritmoSelecionado] = useState<string>('EDF');
+  const [algoritmoSelecionado, setAlgoritmoSelecionado] = useState<string>('');
  
 
   const adicionarProcesso = () => {
@@ -49,11 +49,14 @@ function App() {
       deadline: deadlineInput,
     };
 
+  
+
     const updatedList = [...novaListaProcessos, novoProcesso];
     setNovaListaProcessos(updatedList);
     console.log('Nova lista de processos:', updatedList);
 
     setProcessosLista((prevProcessosLista) => [...prevProcessosLista, novoProcesso]);
+    setAlgoritmoSelecionado(conditions.metodo);
   };
 
   const handleDelete = (id: number) => {
@@ -118,7 +121,6 @@ function App() {
             },
             options: {
               responsive: true,
-              maintainAspectRatio: false,
               scales: {
                 x: {
                   title: {

@@ -18,12 +18,11 @@ const Algoritmo = ({ conditions, setConditions }: AlgoritmoProps) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-expressions
 
   const atualizarPaginacao = (value: string) => {
-    if (value === 'FIFO') {
-      setConditions({ ...conditions, paginacao: 'MRU' });
-    }
-    if (value === 'MRU') {
-      setConditions({ ...conditions, paginacao: 'FIFO' });
-    }
+    setConditions( prevConditions => {
+      conditions = {...prevConditions, paginacao: value as ICondicao['paginacao']};
+      console.log({conditions});
+      return conditions;
+    })
   };
 
   return (
@@ -39,7 +38,6 @@ const Algoritmo = ({ conditions, setConditions }: AlgoritmoProps) => {
                     className="botao"
                     type="button"
                     onClick={() => {
-                      console.log({ conditions });
                       setConditions({ ...conditions, metodo });
                     }}
                   >
@@ -86,7 +84,6 @@ const Algoritmo = ({ conditions, setConditions }: AlgoritmoProps) => {
                   value={conditions.paginacao}
                   onClick={() => {
                     atualizarPaginacao(paginacao);
-                    console.log({ conditions });
                   }}
                 >
                   {paginacao}
