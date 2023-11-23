@@ -5,10 +5,10 @@ import { IProcesso } from "../interfaces/Processo";
 
 abstract class MemoriaAbstracao implements IAlgoritmoPaginacao {
 
-    private ram: IMemoria;
-    private disco: IMemoria;
-    private tabelaPagina:Map<number, number>;
-    private nPagMap: Map<number, number>;
+    protected ram: IMemoria;
+    protected disco: IMemoria;
+    protected tabelaPagina:Map<number, number>;
+    protected nPagMap: Map<number, number>;
 
 
     constructor(processos: IProcesso[], tamanhoRam: number, tamanhoDisco: number, tamanhoPagina: number){
@@ -48,11 +48,7 @@ abstract class MemoriaAbstracao implements IAlgoritmoPaginacao {
   }
   run(schedule: number[]): IPaginacaoDados[] {
     throw new Error("Method not implemented.");
+    }
 }
-
-   
-    
-
-}
-
+export default MemoriaAbstracao;
 
