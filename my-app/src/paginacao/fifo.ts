@@ -16,12 +16,18 @@ export default class FIFOPaginacao extends MemoriaAbstracao {
   
     caregamentoProcessosPaginas(processId: number): void {
 
-      let nPaginaEmDisco: number = (this.nPagMap.get(processId) as number) - (this.tabelaPagina.get(processId) as number);
+    // o "!" garante o não retorno de valor nulo || indefinido
 
+      let nPaginaEmDisco: number = this.nPagMap.get(processId)! - this.tabelaPagina.get(processId)!;
+
+
+// Se não há páginas em disco, não é necessário fazer nada
 
       if (nPaginaEmDisco === 0) 
               return;
-  
+
+
+// Se o número de páginas em disco for maior que a memória livre na RAM
       if (nPaginaEmDisco > this.ram.memoriaLiberar) {
 
         let alocacaoMemoria: number = this.ram.memoriaLiberar;
@@ -29,22 +35,31 @@ export default class FIFOPaginacao extends MemoriaAbstracao {
         while (alocacaoMemoria < nPaginaEmDisco) {
 
           let primeiroProcesso: number = this.primeiroNaLista[0];
-          let primeiroProcessoRamPages: number = this.tabelaPagina.get( primeiroProcesso ) as number;
-          let novaAlocacaoMemoria: number =primeiroProcessoRamPages + alocacaoMemoria;
+          let primeiroProcessoRamPages: number = this.tabelaPagina.get(primeiroProcesso)!;
+          let novaAlocacaoMemoria: number = primeiroProcessoRamPages + alocacaoMemoria;
   
+    // Se a nova alocação de memória é suficiente para todas as páginas em disco
+
           if (novaAlocacaoMemoria <= nPaginaEmDisco) {
 
            alocacaoMemoria = novaAlocacaoMemoria;
+
             this.primeiroNaLista.shift();
             this.ramParaDisk(primeiroProcesso, primeiroProcessoRamPages);
+
           } else {
-            let necessaryPages = nPaginaEmDisco - alocacaoMemoria;
-            
-            alocacaoMemoria += necessaryPages;
-            this.ramParaDisk(primeiroProcesso, necessaryPages);
+    // Caso contrário, calcula quantas páginas são necessárias e faz a alocação parcial
+
+            let paginasNecessarias = nPaginaEmDisco - alocacaoMemoria;
+
+            alocacaoMemoria += paginasNecessarias;
+            this.ramParaDisk(primeiroProcesso, paginasNecessarias);
           }
         }
       }
+
+// Move as páginas da RAM para o disco e, em seguida, da RAM para a RAM
+    
   
       this.discoParaRam(processId, nPaginaEmDisco);
       this.primeiroNaLista.push(processId);
