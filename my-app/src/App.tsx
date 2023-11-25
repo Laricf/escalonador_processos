@@ -25,8 +25,8 @@ const App: React.FC = () => {
   const estadoInicial: ICondicao = {
     metodo: "FIFO",
     paginacao: "FIFO",
-    quantum: 0,
-    sobrecarga: 2,
+    quantum: 2,
+    sobrecarga: 0,
     intervalo: 0,
   };
  
@@ -54,6 +54,7 @@ const App: React.FC = () => {
       deadline: deadlineInput,
     };
 
+   
   
 
     const updatedList = [...novaListaProcessos, novoProcesso];
@@ -69,6 +70,23 @@ const App: React.FC = () => {
     console.log("Item excluído com o ID:", id);
     console.log("Nova lista de processos:", updatedCards);
     setNovaListaProcessos(updatedCards);
+  };
+  const resetarEstadoInicial = () => {
+    console.log('Resetando estado inicial...');
+    setConditions(estadoInicial);
+    setAlgoritmoSelecionado('');
+    setResultadoEscalonamento(null);
+    setShouldDrawGraph(false);
+
+    const canvas = canvasRef.current;
+  if (canvas) {
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+  }
+
+    console.log('Estado resetado para:', estadoInicial);
   };
 
   const escalonadores: Record<string, any> = {
@@ -237,7 +255,7 @@ const App: React.FC = () => {
         </div>
         <div className="thirdSection">
           <button onClick={handleRun} >Run</button>
-          <button>Reset</button>
+          <button onClick={resetarEstadoInicial}>Reset</button>
         </div>
         <div className="graficoSection">
         <canvas ref={canvasRef} width={600} height={400} style={{ border: '5px solid #dd2424' }} />
