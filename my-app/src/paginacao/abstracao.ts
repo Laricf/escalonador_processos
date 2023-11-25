@@ -56,7 +56,23 @@ nPagMap: apa que mantém o número de páginas para cada processo. */
 
   // FALTA TRECHO -- Não finalizado
   run(schedule: number[]): IPaginacaoDados[] {
-    throw new Error("Method not implemented.");
+    const pagina: IPaginacaoDados[] = [];
+    let processoAtual: number;
+
+    for (let i = 0; i < schedule.length; i++) {
+      processoAtual = schedule[i];
+
+      if (processoAtual !== -1) this.caregamentoProcessosPaginas(schedule[i]);
+
+      pagina.push({
+        etapa: i,
+        execucaoProcesso: processoAtual,
+        ram: [...this.ram.memoriaArmazenar],
+        disco: [...this.disco.memoriaArmazenar],
+      });
+    }
+    return pagina;
+    
     }
 }
 export default MemoriaAbstracao;
