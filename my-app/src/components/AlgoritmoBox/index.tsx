@@ -1,29 +1,48 @@
 import './algoritmoBox.css';
 import { ICondicao } from '../../interfaces/Condicao';
+import {IProcesso} from '../../interfaces/Processo';
 
 interface AlgoritmoProps {
   conditions: ICondicao;
   setConditions: React.Dispatch<React.SetStateAction<ICondicao>>;
+  setProcessosLista: React.Dispatch<React.SetStateAction<IProcesso[]>>;
+  processosLista: IProcesso[];
 }
+
 
 const opcoesMetodo: ICondicao['metodo'][] = ['FIFO', 'EDF', 'RR', 'SJF'];
 const opcoesPaginacao: ICondicao['paginacao'][] = ['FIFO', 'MRU'];
 
-const Algoritmo = ({ conditions, setConditions }: AlgoritmoProps) => {
+const Algoritmo: React.FC<AlgoritmoProps> = ({
+  conditions,
+  setConditions,
+  setProcessosLista,
+  processosLista,
+}: AlgoritmoProps)   => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
     setConditions({ ...conditions, [id]: value ? parseInt(value) : '' });
   };
 
+  const atualizarProcessos = () => {
+    const novosProcessos = processosLista.map((processo) => ({
+      ...processo,
+      metodo: conditions.metodo,
+      paginacao: conditions.paginacao,
+      quantum: conditions.quantum,
+      sobrecarga: conditions.sobrecarga,
+      intervalo: conditions.intervalo,
+    }));
+    setProcessosLista(novosProcessos);
+  };
   // eslint-disable-next-line @typescript-eslint/no-unused-expressions
 
   const atualizarPaginacao = (value: string) => {
-    if (value === 'FIFO') {
-      setConditions({ ...conditions, paginacao: 'MRU' });
-    }
-    if (value === 'MRU') {
-      setConditions({ ...conditions, paginacao: 'FIFO' });
-    }
+    setConditions( prevConditions => {
+      conditions = {...prevConditions, paginacao: value as ICondicao['paginacao']};
+      console.log({conditions});
+      return conditions;
+    })
   };
 
   return (
@@ -39,7 +58,6 @@ const Algoritmo = ({ conditions, setConditions }: AlgoritmoProps) => {
                     className="botao"
                     type="button"
                     onClick={() => {
-                      console.log({ conditions });
                       setConditions({ ...conditions, metodo });
                     }}
                   >
@@ -56,7 +74,6 @@ const Algoritmo = ({ conditions, setConditions }: AlgoritmoProps) => {
                   type="number"
                   id="quantum"
                   min="1"
-                  value={conditions.quantum}
                   onChange={handleChange}
                 />
               </div>
@@ -67,7 +84,6 @@ const Algoritmo = ({ conditions, setConditions }: AlgoritmoProps) => {
                   type="number"
                   id="sobrecarga"
                   min="0"
-                  value={conditions.sobrecarga}
                   onChange={handleChange}
                 />
               </div>
@@ -86,7 +102,6 @@ const Algoritmo = ({ conditions, setConditions }: AlgoritmoProps) => {
                   value={conditions.paginacao}
                   onClick={() => {
                     atualizarPaginacao(paginacao);
-                    console.log({ conditions });
                   }}
                 >
                   {paginacao}

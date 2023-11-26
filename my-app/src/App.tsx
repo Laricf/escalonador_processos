@@ -2,12 +2,11 @@ import React, { useEffect, useRef, useState} from 'react';
 import './App.css';
 import Algoritmo from './components/AlgoritmoBox';
 import { ICondicao } from './interfaces/Condicao';
-import Grafico from './components/Grafico/index';
 import FIFO from './algoritmos_escalonamento/fifo';
 import SJF from './algoritmos_escalonamento/sjf';
 import EDF from './algoritmos_escalonamento/edf';
 import roundRobin from './algoritmos_escalonamento/roundRobin';
-import ChartJS, { Chart, ChartType } from 'chart.js/auto';
+import { IProcesso } from './interfaces/Processo';
 
 
 interface Processo {
@@ -18,17 +17,15 @@ interface Processo {
   deadline: number;
 }
 
-function App() {
+const App: React.FC = () => {
   const estadoInicial: ICondicao = {
     metodo: "FIFO",
     paginacao: "FIFO",
-    quantum: 0,
-    sobrecarga: 2,
+    quantum: 2,
+    sobrecarga: 0,
     intervalo: 0,
   };
-
-  
-
+ 
   const [conditions, setConditions] = useState<ICondicao>(estadoInicial);
   const [processosLista, setProcessosLista] = useState<Processo[]>([]);
   const [tempoInput, setTempoInput] = useState<number>(1);
@@ -36,7 +33,11 @@ function App() {
   const [chegadaInput, setChegadaInput] = useState<number>(1);
   const [paginasInput, setPaginasInput] = useState<number>(0);
   const [novaListaProcessos, setNovaListaProcessos] = useState<Processo[]>([]);
-  const [algoritmoSelecionado, setAlgoritmoSelecionado] = useState<string>('EDF');
+  const [algoritmoSelecionado, setAlgoritmoSelecionado] = useState<string>('');
+  const [resultadoEscalonamento, setResultadoEscalonamento] = useState<number[][] | null>(null);
+  const [shouldDrawGraph, setShouldDrawGraph] = useState(false);
+  
+  
  
 
   const adicionarProcesso = () => {
@@ -53,7 +54,13 @@ function App() {
     setNovaListaProcessos(updatedList);
     console.log('Nova lista de processos:', updatedList);
 
+    setTempoInput(1);
+    setDeadlineInput(0);
+    setChegadaInput(1);
+    setPaginasInput(0);
+  
     setProcessosLista((prevProcessosLista) => [...prevProcessosLista, novoProcesso]);
+    setAlgoritmoSelecionado(conditions.metodo);
   };
 
   const handleDelete = (id: number) => {
@@ -61,6 +68,23 @@ function App() {
     console.log("Item excluído com o ID:", id);
     console.log("Nova lista de processos:", updatedCards);
     setNovaListaProcessos(updatedCards);
+  };
+  const resetarEstadoInicial = () => {
+    console.log('Resetando estado inicial...');
+    setConditions(estadoInicial);
+    setAlgoritmoSelecionado('');
+    setResultadoEscalonamento(null);
+    setShouldDrawGraph(false);
+
+    const canvas = canvasRef.current;
+  if (canvas) {
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+  }
+
+    console.log('Estado resetado para:', estadoInicial);
   };
 
   const escalonadores: Record<string, any> = {
@@ -71,76 +95,113 @@ function App() {
     // Adicione outros escalonadores aqui
   };
  
+  const runSequentially = async () => {
+     let tempoAtual = 0;
+
+  for (let i = 0; i < novaListaProcessos.length; i++) {
+    const processo = novaListaProcessos[i];
+
+    // eslint-disable-next-line no-loop-func
+    await new Promise((resolve) => {
+      setTimeout(() => {
+        console.log(`Processo ${processo.id} iniciado.`);
+        setTimeout(() => {
+          console.log(`Processo ${processo.id} concluído.`);
+          tempoAtual += processo.tempoExecucao; // Atualizando o tempo atual
+          resolve(null);
+        }, processo.tempoExecucao * 1000); // Tempo de execução em segundos
+      }, Math.max(processo.tempoChegada - tempoAtual, 0) * 1000); // Atraso para início do próximo processo
+    });
+  }
+  setShouldDrawGraph(true); 
+};
 
   const handleRun = () => {
+    runSequentially();
     const escalonadorSelecionado = escalonadores[algoritmoSelecionado];
     if (escalonadorSelecionado) {
-      console.log('Rodando o algoritmo:', algoritmoSelecionado); // Adiciona o console.log aqui
-      const resultadoEscalonamento = new escalonadorSelecionado().escalonador(processosLista);
+      console.log('Rodando o algoritmo:', algoritmoSelecionado);
+
+      // Atualizar os processos com as condições selecionadas antes de rodar o escalonador
+      const novosProcessos = processosLista.map((processo) => ({
+        ...processo,
+        metodo: conditions.metodo,
+        paginacao: conditions.paginacao,
+        quantum: conditions.quantum,
+        sobrecarga: conditions.sobrecarga,
+        intervalo: conditions.intervalo,
+      }));
+      console.log('Valor de sobrecarga:', conditions.sobrecarga);
+      console.log('Valor de quantum:', conditions.quantum);
+
+      // Executar o escalonador com os novos processos
+      const resultadoEscalonamento = new escalonadorSelecionado().escalonador(novosProcessos);
       console.log('Resultado do escalonamento:', resultadoEscalonamento);
-      plotChart(resultadoEscalonamento);
     } else {
       console.error('Escalonador não encontrado.');
     }
   };
 
- 
-  const chartRef = useRef<HTMLCanvasElement | null>(null);
-  const [chart, setChart] = useState<Chart<"line"> | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  const plotChart = (resultadoEscalonamento: number[]) => {
-    if (chartRef.current) {
-      const ctx = chartRef.current.getContext('2d');
+  useEffect(() => {
+    if (shouldDrawGraph && canvasRef.current) {
+      const canvas = canvasRef.current;
+      const ctx = canvas.getContext('2d');
+  
       if (ctx) {
-        const data = resultadoEscalonamento.map((value, index) => ({
-          x: index ,
-          y: value,
-        }));
-
-        console.log('Dados do gráfico:', data);
-
-        if (chart) {
-          chart.data.datasets[0].data = data;
-          chart.update();
-        } else {
-          const newChart = new Chart(ctx, {
-            type: 'line', 
-            data: {
-              datasets: [
-                {
-                  label: 'Execução dos Processos',
-                  data: data,
-                  backgroundColor: 'rgba(99, 230, 19, 0.2)', // Cor de fundo
-                  borderColor: 'rgba(255, 99, 132, 1)', // Cor da linha
-                  borderWidth: 2,
-                },
-              ],
-            },
-            options: {
-              responsive: true,
-              maintainAspectRatio: false,
-              scales: {
-                x: {
-                  title: {
-                    display: true,
-                    text: 'Tempo',
-                  },
-                },
-                y: {
-                  title: {
-                    display: true,
-                    text: 'ID do Processo',
-                  },
-                },
-              },
-            },
-          });
-          setChart(newChart);
-        }
+        const barHeight = 30;
+        const barMargin = 10;
+        let tempoAtual = 0;
+        let index = 0;
+        let turnaroundTotal = 0;
+  
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.font = '20px Arial';
+  
+        const drawProcess = (processo: Processo) => {
+          // Representação da execução do processo
+          ctx.fillStyle = 'blue';
+          ctx.fillRect(tempoAtual * 10, index * (barHeight + barMargin) + 20, processo.tempoExecucao * 10, barHeight);
+          ctx.fillText(`Processo: ${processo.id}`, 100 + tempoAtual * 10, index * (barHeight + barMargin) + 20 + barHeight / 2 + 5);
+  
+          const turnaround = 1 + processo.tempoExecucao - processo.tempoChegada;
+          turnaroundTotal += turnaround;
+  
+          // Exibe o turnaround do processo atual
+          const turnaroundMedio = turnaroundTotal / (index + 1);
+          ctx.fillStyle = 'green';
+          ctx.fillText(`Turnaround Médio: ${turnaroundMedio.toFixed(2)}`, 200, 20);
+  
+          tempoAtual += processo.tempoExecucao;
+  
+          // Verificar se há sobrecarga após o processo
+          if (tempoAtual % conditions.quantum === 0) {
+            ctx.fillStyle = 'red';
+            ctx.fillRect(tempoAtual * 10, index * (barHeight + barMargin) + 20, conditions.sobrecarga * 10, barHeight);
+            ctx.fillText('', tempoAtual * 10, index * (barHeight + barMargin) + 20 + barHeight / 2 + 5);
+  
+            tempoAtual += conditions.sobrecarga; // Adicionar sobrecarga ao tempo
+          }
+  
+          index++;
+  
+          // Chama o próximo processo após um pequeno intervalo (500ms)
+          if (index < novaListaProcessos.length) {
+            setTimeout(() => {
+              drawProcess(novaListaProcessos[index]);
+            }, 500);
+          }
+        };
+  
+        // Inicia o desenho do primeiro processo
+        drawProcess(novaListaProcessos[index]);
       }
     }
-  };
-
+  }, [shouldDrawGraph, novaListaProcessos, conditions.quantum, conditions.sobrecarga]);
+  
+  
+  
 
   return (
     <div className="App">
@@ -149,9 +210,10 @@ function App() {
       </header>
       <main>
         <div className="firstSection">
-          <Algoritmo conditions={conditions} setConditions={setConditions} />
+        <Algoritmo conditions={conditions} setConditions={setConditions} processosLista={processosLista} setProcessosLista={function (value: React.SetStateAction<IProcesso[]>): void {
+            throw new Error('Function not implemented.');
+          } } />
         </div>
-
         <div className="secondSection">
           <div className="boxProcess">
             <main className='cardinteiro'>
@@ -214,9 +276,11 @@ function App() {
         </div>
         <div className="thirdSection">
           <button onClick={handleRun} >Run</button>
-          <button>Reset</button>
+          <button onClick={resetarEstadoInicial}>Reset</button>
         </div>
-        <canvas ref={chartRef} id="myChart" width="10" height="10"></canvas>
+        <div className="graficoSection">
+        <canvas ref={canvasRef} width={600} height={400} style={{ border: '5px solid #dd2424' }} />
+      </div>
       </main>
     </div>
   );

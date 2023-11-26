@@ -2,7 +2,6 @@ import { IProcesso } from "../interfaces/Processo";
 import Escalonador from "../interfaces/Escalonador";
 
 
-
 export default class EDFescalonador implements Escalonador {
     public escalonador(
         processos: IProcesso[],
@@ -20,6 +19,7 @@ export default class EDFescalonador implements Escalonador {
          
         while (vetorDeProcessos.length !==0) {
             const chegadaProcesso: number[] = vetorDeProcessos
+            // eslint-disable-next-line no-loop-func
             .map((processo, index) => 
             processo.tempoChegada <= tempoExecucaoAtual ? index : -1
             )
