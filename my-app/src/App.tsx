@@ -153,43 +153,53 @@ const App: React.FC = () => {
         const barHeight = 30;
         const barMargin = 10;
         let tempoAtual = 0;
+        let index = 0;
         let turnaroundTotal = 0;
   
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.font = '20px Arial';
   
-        novaListaProcessos.forEach((processo, index) => {
-          setTimeout(() => {
-            // Representação da execução do processo
-            ctx.fillStyle = 'blue';
-            ctx.fillRect(tempoAtual * 10, index * (barHeight + barMargin) + 20, processo.tempoExecucao * 10, barHeight);
-            ctx.fillText(`Processo: ${processo.id}`, 100 + tempoAtual * 10, index * (barHeight + barMargin) + 20 + barHeight / 2 + 5);
+        const drawProcess = (processo: Processo) => {
+          // Representação da execução do processo
+          ctx.fillStyle = 'blue';
+          ctx.fillRect(tempoAtual * 10, index * (barHeight + barMargin) + 20, processo.tempoExecucao * 10, barHeight);
+          ctx.fillText(`Processo: ${processo.id}`, 100 + tempoAtual * 10, index * (barHeight + barMargin) + 20 + barHeight / 2 + 5);
   
-            const turnaround =  1 + processo.tempoExecucao - processo.tempoChegada;
-            turnaroundTotal += turnaround;
-            console.log(turnaroundTotal)
+          const turnaround = 1 + processo.tempoExecucao - processo.tempoChegada;
+          turnaroundTotal += turnaround;
   
-            tempoAtual += processo.tempoExecucao;
+          // Exibe o turnaround do processo atual
+          const turnaroundMedio = turnaroundTotal / (index + 1);
+          ctx.fillStyle = 'green';
+          ctx.fillText(`Turnaround Médio: ${turnaroundMedio.toFixed(2)}`, 200, 20);
   
-            // Verificar se há sobrecarga após o processo
-            if (tempoAtual % conditions.quantum === 0) {
-              ctx.fillStyle = 'red';
-              ctx.fillRect(tempoAtual * 10, index * (barHeight + barMargin) + 20, conditions.sobrecarga * 10, barHeight);
-              ctx.fillText('Sobrecarga', tempoAtual * 10, index * (barHeight + barMargin) + 20 + barHeight / 2 + 5);
+          tempoAtual += processo.tempoExecucao;
   
-              
-            }
+          // Verificar se há sobrecarga após o processo
+          if (tempoAtual % conditions.quantum === 0) {
+            ctx.fillStyle = 'red';
+            ctx.fillRect(tempoAtual * 10, index * (barHeight + barMargin) + 20, conditions.sobrecarga * 10, barHeight);
+            ctx.fillText('', tempoAtual * 10, index * (barHeight + barMargin) + 20 + barHeight / 2 + 5);
   
-            // Se for o último processo, calcula e exibe o turnaround médio
-            if (index === novaListaProcessos.length - 1) {
-              const turnaroundMedio = turnaroundTotal / novaListaProcessos.length;
-              ctx.fillText(`Turnaround Médio: ${turnaroundMedio.toFixed(2)}`, 10, 20);
-            }
-          }, Math.max(processo.tempoChegada - tempoAtual, 0) * 1000);
-        });
+            tempoAtual += conditions.sobrecarga; // Adicionar sobrecarga ao tempo
+          }
+  
+          index++;
+  
+          // Chama o próximo processo após um pequeno intervalo (500ms)
+          if (index < novaListaProcessos.length) {
+            setTimeout(() => {
+              drawProcess(novaListaProcessos[index]);
+            }, 500);
+          }
+        };
+  
+        // Inicia o desenho do primeiro processo
+        drawProcess(novaListaProcessos[index]);
       }
     }
   }, [shouldDrawGraph, novaListaProcessos, conditions.quantum, conditions.sobrecarga]);
+  
   
   
 
