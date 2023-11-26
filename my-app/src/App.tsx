@@ -2,14 +2,10 @@ import React, { useEffect, useRef, useState} from 'react';
 import './App.css';
 import Algoritmo from './components/AlgoritmoBox';
 import { ICondicao } from './interfaces/Condicao';
-import Grafico from './components/Grafico/index';
 import FIFO from './algoritmos_escalonamento/fifo';
 import SJF from './algoritmos_escalonamento/sjf';
 import EDF from './algoritmos_escalonamento/edf';
 import roundRobin from './algoritmos_escalonamento/roundRobin';
-import ChartJS, { Chart, ChartType } from 'chart.js/auto';
-import ApexCharts from 'react-apexcharts';
-import ReactApexChart from 'react-apexcharts';
 import { IProcesso } from './interfaces/Processo';
 
 
@@ -54,13 +50,15 @@ const App: React.FC = () => {
       deadline: deadlineInput,
     };
 
-   
-  
-
     const updatedList = [...novaListaProcessos, novoProcesso];
     setNovaListaProcessos(updatedList);
     console.log('Nova lista de processos:', updatedList);
 
+    setTempoInput(1);
+    setDeadlineInput(0);
+    setChegadaInput(1);
+    setPaginasInput(0);
+  
     setProcessosLista((prevProcessosLista) => [...prevProcessosLista, novoProcesso]);
     setAlgoritmoSelecionado(conditions.metodo);
   };
@@ -155,6 +153,7 @@ const App: React.FC = () => {
         const barHeight = 30;
         const barMargin = 10;
         let tempoAtual = 0;
+        let turnaroundTotal = 0;
   
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.font = '20px Arial';
@@ -166,6 +165,10 @@ const App: React.FC = () => {
             ctx.fillRect(tempoAtual * 10, index * (barHeight + barMargin) + 20, processo.tempoExecucao * 10, barHeight);
             ctx.fillText(`Processo: ${processo.id}`, 100 + tempoAtual * 10, index * (barHeight + barMargin) + 20 + barHeight / 2 + 5);
   
+            const turnaround =  1 + processo.tempoExecucao - processo.tempoChegada;
+            turnaroundTotal += turnaround;
+            console.log(turnaroundTotal)
+  
             tempoAtual += processo.tempoExecucao;
   
             // Verificar se há sobrecarga após o processo
@@ -174,13 +177,21 @@ const App: React.FC = () => {
               ctx.fillRect(tempoAtual * 10, index * (barHeight + barMargin) + 20, conditions.sobrecarga * 10, barHeight);
               ctx.fillText('Sobrecarga', tempoAtual * 10, index * (barHeight + barMargin) + 20 + barHeight / 2 + 5);
   
-              tempoAtual += conditions.sobrecarga; // Adicionar sobrecarga ao tempo
+              
+            }
+  
+            // Se for o último processo, calcula e exibe o turnaround médio
+            if (index === novaListaProcessos.length - 1) {
+              const turnaroundMedio = turnaroundTotal / novaListaProcessos.length;
+              ctx.fillText(`Turnaround Médio: ${turnaroundMedio.toFixed(2)}`, 10, 20);
             }
           }, Math.max(processo.tempoChegada - tempoAtual, 0) * 1000);
         });
       }
     }
   }, [shouldDrawGraph, novaListaProcessos, conditions.quantum, conditions.sobrecarga]);
+  
+  
 
   return (
     <div className="App">
