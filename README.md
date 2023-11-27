@@ -24,5 +24,5 @@ de execução)
  #### Membros: 
         - Adelaine Santos
         - Larissa Conrado
-        - Leticia 
+        - Leticia Costa
         - Matheus Quevedo
