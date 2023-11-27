@@ -2,7 +2,7 @@ import Escalonador from "../interfaces/Escalonador";
 import { IProcesso } from "../interfaces/Processo";
 import RotatingQueue from "../dados/RotatingQueue"; 
 
-export default class RoundRobinAlgortimo implements Escalonador {
+export default class roundRobin implements Escalonador {
     public escalonador(
         processos: IProcesso[], 
         quantum: number = 2, 

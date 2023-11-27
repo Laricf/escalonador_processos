@@ -2,7 +2,7 @@ import { IProcesso } from "../interfaces/Processo";
 import Escalonador from "../interfaces/Escalonador";
 
 
-export default class EDFescalonador implements Escalonador {
+export default class EDF implements Escalonador {
     public escalonador(
         processos: IProcesso[],
         quantum: number = 2,

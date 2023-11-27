@@ -68,11 +68,11 @@ main{
 .plus{
   background-image: url('../../my-app/public/plus.png');
   background-repeat: no-repeat;
+  background-color: transparent;
   background-size: 70% 70%;
   background-position: center;
   width: 3em;
   height: 3em;
-  border: none;
   border-radius: 2em;
   cursor: pointer;
 }
@@ -106,24 +106,50 @@ main{
   border-radius: .2em;
   margin-left: 1.5em;
   border-radius: 5px;
-  cursor: pointer;
   box-shadow: 2px 2px 4px rgba(243, 240, 240, 0.959);
 }
 .card2 {
+  display: flex;
+  flex-direction: column;
   background-color: #d9d9d9;
   width: 23em;
   height: 13em;
   display: flex;
   justify-content: space-evenly;
-  align-items: center;
   border-radius: .2em;
   margin-left: 1.5em;
   border-radius: 5px;
-  cursor: pointer;
   box-shadow: 2px 2px 4px rgba(243, 240, 240, 0.959);
   margin-top: 2rem;
 }
+.card3{
+  display: flex;
+  width: 100%;
+  gap: 2rem;
+  justify-content: center;
+}
 
+.topSectionCard{
+  display: flex;
+  margin: 0 auto;
+  width: 90%;
+  justify-content: space-between;
+  align-items: center;
+  gap: .5em;
+}
+
+.exit{
+  background-image: url('../../my-app/public/x.png');
+  background-repeat: no-repeat;
+  background-color: transparent;
+  background-size: 70% 70%;
+  background-position: center;
+  width: 3em;
+  height: 3em;
+  border: none;
+  border-radius: 2em;
+  cursor: pointer;
+}
 .boxCard{
   display: flex;
   flex-direction: column;
@@ -179,4 +205,11 @@ main{
     flex-direction: column;
     align-items: center;
     gap: .5em;
+  }
+
+
+  .graficoSection{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }

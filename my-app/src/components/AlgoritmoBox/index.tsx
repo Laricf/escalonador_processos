@@ -5,12 +5,13 @@ import {IProcesso} from '../../interfaces/Processo';
 interface AlgoritmoProps {
   conditions: ICondicao;
   setConditions: React.Dispatch<React.SetStateAction<ICondicao>>;
-  setProcessosLista: React.Dispatch<React.SetStateAction<IProcesso[]>>;
+  setProcessosLista: React.Dispatch<IProcesso[]>;
+  setAlgortimoSelecionado: React.Dispatch<ICondicao['metodo']>;
   processosLista: IProcesso[];
 }
 
 
-const opcoesMetodo: ICondicao['metodo'][] = ['FIFO', 'EDF', 'RR', 'SJF'];
+export const opcoesMetodo: ICondicao['metodo'][] = ['FIFO', 'EDF', 'RR', 'SJF'];
 const opcoesPaginacao: ICondicao['paginacao'][] = ['FIFO', 'MRU'];
 
 const Algoritmo: React.FC<AlgoritmoProps> = ({
@@ -18,24 +19,24 @@ const Algoritmo: React.FC<AlgoritmoProps> = ({
   setConditions,
   setProcessosLista,
   processosLista,
+  setAlgortimoSelecionado,
 }: AlgoritmoProps)   => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
     setConditions({ ...conditions, [id]: value ? parseInt(value) : '' });
   };
 
-  const atualizarProcessos = () => {
-    const novosProcessos = processosLista.map((processo) => ({
-      ...processo,
-      metodo: conditions.metodo,
-      paginacao: conditions.paginacao,
-      quantum: conditions.quantum,
-      sobrecarga: conditions.sobrecarga,
-      intervalo: conditions.intervalo,
-    }));
-    setProcessosLista(novosProcessos);
-  };
-  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+  // const atualizarProcessos = () => {
+  //   const novosProcessos = processosLista.map((processo) => ({
+  //     ...processo,
+  //     metodo: conditions.metodo,
+  //     paginacao: conditions.paginacao,
+  //     quantum: conditions.quantum,
+  //     sobrecarga: conditions.sobrecarga,
+  //     intervalo: conditions.intervalo,
+  //   }));
+  //   setProcessosLista(novosProcessos);
+  // };
 
   const atualizarPaginacao = (value: string) => {
     setConditions( prevConditions => {
@@ -45,6 +46,10 @@ const Algoritmo: React.FC<AlgoritmoProps> = ({
     })
   };
 
+  const atualizarMetodo = (metodo: ICondicao['metodo']) => {
+    setConditions({...conditions, metodo});
+    setAlgortimoSelecionado(metodo);
+  }
   return (
     <div className="corpo">
       <form className="algoritmo" onSubmit={(e) => e.preventDefault()}>
@@ -58,7 +63,7 @@ const Algoritmo: React.FC<AlgoritmoProps> = ({
                     className="botao"
                     type="button"
                     onClick={() => {
-                      setConditions({ ...conditions, metodo });
+                      atualizarMetodo(metodo);
                     }}
                   >
                     {metodo}

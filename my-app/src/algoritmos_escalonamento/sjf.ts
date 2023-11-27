@@ -2,7 +2,7 @@ import Escalonador from "../interfaces/Escalonador";
 import { IProcesso } from "../interfaces/Processo";
 
 
-class SJFAlgoritmo implements Escalonador {
+class SJF implements Escalonador {
 
     public escalonador(processos: IProcesso[]): any {
         let escalonador: number[] = [];
@@ -42,4 +42,4 @@ class SJFAlgoritmo implements Escalonador {
         return escalonador;
     }
 }
-export default SJFAlgoritmo;
+export default SJF;
